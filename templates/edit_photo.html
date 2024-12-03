@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>사진 수정</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #E0F7FA;
+            color: #004D40;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* 화면 높이에 맞춰 중앙 정렬 */
+            margin: 0;
+        }
+        h1 {
+            font-size: 36px; /* 제목 크기 조정 */
+            margin-bottom: 30px;
+            color: #00796B;
+            text-shadow: 1px 1px 2px #80DEEA;
+        }
+        form {
+            background-color: #B2EBF2;
+            padding: 30px; /* 패딩 증가 */
+            border-radius: 15px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3); /* 그림자 강도 증가 */
+            width: 400px; /* 폼 너비 조정 */
+        }
+        label {
+            font-size: 20px; /* 레이블 크기 조정 */
+            margin-top: 15px;
+            display: block; /* 레이블을 블록 요소로 설정 */
+        }
+        input[type="file"],
+        input[type="submit"] {
+            width: 100%; /* 입력 필드 너비 100% */
+            padding: 12px; /* 입력 필드 패딩 조정 */
+            margin-top: 10px;
+            border-radius: 10px;
+            border: 1px solid #00796B;
+            font-size: 18px; /* 입력 필드 글씨 크기 조정 */
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+        }
+        input[type="submit"] {
+            background-color: #00796B;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 20px; /* 버튼 글씨 크기 조정 */
+        }
+        input[type="submit"]:hover {
+            background-color: #004D40; /* 버튼 호버 색상 */
+        }
+        img {
+            width: 100%; /* 이미지 크기를 화면에 꽉 차게 설정 */
+            height: auto; /* 비율 유지 */
+            border-radius: 10px;
+            margin-top: 20px; /* 이미지와 버튼 사이 간격 */
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+        }
+        a {
+            text-decoration: none;
+            color: #00796B;
+            font-size: 20px; /* 링크 글씨 크기 조정 */
+            margin-top: 20px;
+        }
+        a:hover {
+            color: #004D40; /* 링크 호버 색상 */
+        }
+    </style>
+</head>
+<body>
+    <h1>사진 수정</h1>
+    <form action="{{ url_for('edit_photo', record_id=record_id) }}" method="post" enctype="multipart/form-data">
+        <label for="photo">새로운 사진 선택:</label>
+        <input type="file" name="photo" required>
+        <img src="{{ url_for('static', filename='uploads/' + filename) }}" alt="현재 사진">
+        <input type="submit" value="수정">
+    </form>
+    <a href="{{ url_for('view_calendar') }}">취소</a>
+</body>
+</html>

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>운동처방 추천</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        /* 전체적인 스타일 */
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f5f5f5 ;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #020135;
+            margin-top: 30px;
+        }
+
+        /* 폼 스타일 */
+        form {
+            margin: 20px auto;
+            text-align: center;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(65, 1, 184, 0.1);
+            width: 50%;
+        }
+
+        /* 뒤로 가기 버튼 */
+        .back-btn {
+            position: absolute; /* 폼 밖에서 절대 위치 */
+            top: 30px; /* 상단에서 30px 떨어지게 */
+            left: 30px; /* 왼쪽에서 30px 떨어지게 */
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #ffffff;
+            background-color: #020135;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .back-btn:hover {
+            background-color: #020135;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        label {
+            font-size: 18px;
+            color: #020135;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        select {
+            width: 100%;
+            max-width: 300px;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 1px solid #1a044e
+            background-color: #ffffff;
+            color: #020135;
+            transition: 0.3s ease;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #0097a7;
+            box-shadow: 0 0 6px rgba(0, 151, 167, 0.5);
+        }
+
+        /* 추천 동영상 스타일 */
+        ul {
+            list-style-type: none;
+            padding: 0;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap; /* 가로로 나열되도록 설정 */
+        }
+
+        li {
+            margin: 20px;
+            width: 30%; /* 각 카드 크기 */
+            display: flex;
+            justify-content: center;
+        }
+
+        .video-card {
+            display: flex;
+            flex-direction: column; /* 썸네일이 위, 제목과 버튼이 아래 */
+            align-items: center;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 300px; /* 카드 크기 제한 */
+            width: 100%;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .thumbnail-container {
+            width: 100%;
+            height: 200px; /* 썸네일 크기 */
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px; /* 썸네일과 제목 사이 여백 */
+        }
+
+        .thumbnail-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .video-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            flex: 1;
+            text-align: center;
+        }
+
+        .video-info strong {
+            font-size: 20px; /* 제목 크기 증가 */
+            color: #020135;
+            margin-bottom: 10px;
+        }
+
+        .video-info a button {
+            padding: 12px 15px; /* 버튼 패딩 증가 */
+            font-size: 16px;
+            color: #ffffff;
+            background-color: #020135;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .video-info a button:hover {
+            background-color: #020135;
+        }
+
+        @media (max-width: 768px) {
+            .video-card {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                max-width: 100%;
+                width: 100%;
+            }
+
+            .thumbnail-container {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+
+            form {
+                width: 80%;
+            }
+
+            ul li {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>운동처방 동영상 추천</h1>
+
+    <!-- 뒤로 가기 | 홈으로 텍스트로 표시 -->
+    <div class="navigation">
+        <a href="javascript:history.back()">뒤로 가기</a> | 
+        <a href="{{ url_for('index') }}">홈으로</a>
+    </div>
+
+    <!-- 필터링 폼 -->
+    <form method="POST">
+        <div class="form-group">
+            <label for="category">대분류</label>
+            <select name="category" id="category" onchange="this.form.submit()">
+                <option value="">선택</option>
+                {% for category in categories['대분류'] %}
+                    <option value="{{ category }}" {% if category == selected_category %}selected{% endif %}>{{ category }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="subcategory">중분류</label>
+            <select name="subcategory" id="subcategory" onchange="this.form.submit()">
+                <option value="">선택</option>
+                {% for subcategory in subcategories %}
+                    <option value="{{ subcategory }}" {% if subcategory == selected_subcategory %}selected{% endif %}>{{ subcategory }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="subsubcategory">소분류</label>
+            <select name="subsubcategory" id="subsubcategory" onchange="this.form.submit()">
+                <option value="">선택</option>
+                {% for subsubcategory in subsubcategories %}
+                    <option value="{{ subsubcategory }}" {% if subsubcategory == selected_subsubcategory %}selected{% endif %}>{{ subsubcategory }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </form>
+    <h2>추천 동영상</h2>
+    {% if result %}
+    <ul>
+        {% for item in result %}
+            <li>
+                <!-- 동영상 카드 구조 -->
+                <div class="video-card">
+                    <!-- 썸네일 -->
+                    <div class="thumbnail-container">
+                        <img src="{{ item[0] }}" alt="YouTube Thumbnail">
+                    </div>
+
+                    <!-- 제목과 버튼을 담는 텍스트 영역 -->
+                    <div class="video-info">
+                        <strong>{{ item[1] }}</strong> <!-- 제목 -->
+                        <a href="{{ item[2] }}" target="_blank">
+                            <button type="button">동영상 보기</button>
+                        </a>
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+        <p>추천 동영상이 없습니다.</p>
+    {% endif %}
+</body>
+</html>
+
+<!-- 랜덤 추천 동영상 -->
+<div class="random-videos-container" style="border: 2px solid #1a044e; border-radius: 10px; padding: 20px; margin-top: 30px;">
+    {% if random_videos %}
+    <h3>이런 홈트레이닝 영상은 어때요? 인기있어요!</h3>
+    <ul>
+        {% for video in random_videos %}
+        <li>
+            <div class="video-card">
+                <!-- 썸네일 이미지 -->
+                <div class="thumbnail-container">
+                    <img src="{{ video[0] }}" alt="YouTube Thumbnail">
+                </div>
+                <div class="video-info">
+                    <!-- 동영상 제목 -->
+                    <strong>{{ video[1] }}</strong>
+                    <!-- 동영상 링크 버튼 -->
+                    <a href="{{ video[2] }}">
+                        <button>동영상 보기</button>
+                    </a>
+                </div>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+        <p>추천 동영상이 없습니다.</p>
+    {% endif %}
+</div>
+

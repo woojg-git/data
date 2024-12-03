@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MBTI 결과</title>
+    <style>
+        /* 기본 스타일 */
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            line-height: 1.6;
+        }
+
+        /* 제목 스타일 */
+        h1 {
+            text-align: center;
+            color: #1a044e;
+            margin-top: 20px;
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+
+        /* 뒤로 가기 및 홈 버튼 */
+        .navigation {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+        }
+
+        .navigation a {
+            background-color: #1a044e;
+            color: white;
+            padding: 10px 20px;
+            margin-right: 10px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .navigation a:hover {
+            background-color: #1a044e;
+        }
+
+        /* MBTI 결과 */
+        .mbti-type {
+            color: #1a044e;
+            font-size: 2em;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .mbti-description {
+            background-color: #1a044e;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.2em;
+            line-height: 1.8;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 운동 추천 테이블 */
+        .table-container {
+            width: 90%;
+            margin: 30px auto;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        th {
+            background-color: #391c7e;
+            color: white;
+            font-weight: bold;
+        }
+
+        td {
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        tr:nth-child(even) td {
+            background-color: #f1f1f1;
+        }
+
+        tr:hover td {
+            background-color: #e0f7fa;
+        }
+
+        td a {
+            color: #1a044e;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        td a:hover {
+            text-decoration: underline;
+        }
+
+        /* 반응형 디자인 */
+        @media (max-width: 768px) {
+            th, td {
+                font-size: 12px;
+                padding: 8px;
+            }
+
+            .mbti-description {
+                font-size: 1em;
+                padding: 15px;
+            }
+
+            .table-container {
+                width: 95%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 뒤로가기 및 홈 링크 -->
+    <div class="navigation">
+        <a href="javascript:history.back()">뒤로가기</a>
+        <a href="{{ url_for('index') }}">홈으로</a>
+    </div>
+
+<!-- MBTI 결과 -->
+<h1>MBTI 결과</h1>
+<div class="mbti-type">
+    당신은 <strong style="color: rgb(255, 145, 0);">{{ mbti_type }}</strong>입니다.
+</div>
+
+
+
+    <!-- MBTI 설명 -->
+    <div class="mbti-description">
+        {% if mbti_type == '활동적인 팀 플레이어' %}
+            <p>귀하는 빠르게 움직이며 에너지를 발산하는 팀 스포츠를 즐깁니다. 축구, 야구, 티볼 등의 팀 활동에서 활력을 찾습니다.</p>
+            <p><strong>추천 운동:</strong> 축구, 야구, 티볼</p>
+        {% elif mbti_type == '실내 전략가' %}
+            <p>귀하는 실내에서 전략을 세우고 협력하며 경기를 진행하는 운동을 선호합니다. 배드민턴, 농구, 풋살 등의 실내 스포츠가 어울립니다.</p>
+            <p><strong>추천 운동:</strong> 배드민턴, 농구, 풋살, 줌바, 로빅, 태권도</p>
+        {% elif mbti_type == '활동적인 개인플레이어' %}
+            <p>귀하는 혼자서도 활동적이고 도전적인 운동을 선호하는 유형입니다. 수영, 복싱, 스쿼시, 피겨스케이팅과 같은 개인 스포츠에서 자신의 능력을 발휘합니다.</p>
+            <p><strong>추천 운동:</strong> 수영, 검도, 복싱, 스쿼시, 핏밸런스, 피겨스케이팅, 스피닝</p>
+        {% elif mbti_type == '자유로운 영혼' %}
+            <p>귀하는 자신만의 자유로운 스타일로 운동을 즐기며, 실내보다는 실외에서 다양한 활동을 선호합니다. 인라인 스케이팅이나 줄넘기와 같은 자유로운 운동이 적합합니다.</p>
+            <p><strong>추천 운동:</strong> 인라인 스케이팅, 줄넘기</p>
+        {% elif mbti_type == '평화로운 독주자' %}
+            <p>귀하는 혼자서 자신만의 공간에서 차분하게 운동하는 것을 선호합니다. 헬스, 발레, 피아노, 바둑과 같은 활동이 잘 맞습니다.</p>
+            <p><strong>추천 운동:</strong> 헬스, 발레, 건강, 자세, 마사지, 피아노, 바둑, 볼링</p>
+        {% elif mbti_type == '협력의 마스터' %}
+            <p>귀하는 그룹 내에서 협력하며 조화롭게 운동하는 것을 좋아하는 유형입니다. 요가, 필라테스와 같은 협동적이며 마음의 평화를 찾는 운동을 선호합니다.</p>
+            <p><strong>추천 운동:</strong> 요가, 필라테스, 볼링</p>
+        {% elif mbti_type == '자연을 사랑하는 독립적 탐험가' %}
+            <p>귀하는 자연 속에서 혼자서 독립적으로 활동하는 것을 선호합니다. 드론 조정과 같은 창의적이고 독립적인 운동이 맞습니다.</p>
+            <p><strong>추천 운동:</strong> 드론</p>
+        {% elif mbti_type == '모험을 함께하는 팀' %}
+            <p>귀하는 팀 스포츠를 즐기며, 실외에서 활동하는 것을 선호합니다. 골프나 조깅과 같은 활동이 좋습니다.</p>
+            <p><strong>추천 운동:</strong> 골프, 조깅</p>
+        {% else %}
+            <p>자신의 MBTI 유형에 맞는 설명을 추가하세요.</p>
+        {% endif %}
+    </div>
+
+    <!-- 운동 추천 테이블 -->
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>시설명</th>
+                    <th>시설 종류</th>
+                    <th>지역</th>
+                    <th>운동 종류</th>
+                    <th>프로그램명</th>
+                    <th>대상</th>
+                    <th>운영기간</th>
+                    <th>운영요일</th>
+                    <th>시간대</th>
+                    <th>수강료</th>
+                    <th>홈페이지</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for index, row in sport_types.iterrows() %}
+                <tr>
+                    <td>{{ row["FCLTY_NM"] }}</td>
+                    <td>{{ row["FCLTY_TY_NM"] }}</td>
+                    <td>{{ row["CTPRVN_NM"] }}</td>
+                    <td>{{ row["PROGRM_TY_NM"] }}</td>
+                    <td>{{ row["PROGRM_NM"] }}</td>
+                    <td>{{ row["PROGRM_TRGET_NM"] }}</td>
+                    <td>{{ row["PROGRM_BEGIN_DE"] }} - {{ row["PROGRM_END_DE"] }}</td>
+                    <td>{{ row["PROGRM_ESTBL_WKDAY_NM"] }}</td>
+                    <td>{{ row["PROGRM_ESTBL_TIZN_VALUE"] }}</td>
+                    <td>{{ row["PROGRM_PRC"] }}</td>
+                    <td><a href="{{ row['HMPG_URL'] }}" target="_blank">홈페이지</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>

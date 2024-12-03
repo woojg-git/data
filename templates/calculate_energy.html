@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ exercise_name }} 칼로리 계산</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #e6e6ff; /* 부드러운 보라색 배경 */
+            color: #333; /* 어두운 글씨 */
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #ffffff; /* 흰색 배경 */
+            padding: 30px;
+            border-radius: 15px; /* 둥근 테두리 */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 600px; /* 최대 너비 */
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: #1a044e; /* 제목 색상 */
+        }
+        .form-group label {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #1a044e; /* 레이블 색상 */
+        }
+        .form-control {
+            background-color: #f0f0f0; /* 입력창 배경 */
+            border: 1px solid #1a044e; /* 입력창 테두리 */
+            color: #333;
+            border-radius: 10px;
+            padding: 10px;
+        }
+        .form-control:focus {
+            border-color: #1a044e; /* 포커스 시 테두리 색상 */
+            background-color: #e6e6ff; /* 포커스 시 배경 색상 */
+        }
+        button {
+            background-color: #1a044e; /* 버튼 색상 */
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            width: 100%;
+            font-size: 18px;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3; /* 버튼 hover 시 색상 */
+        }
+        .navigation {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .navigation a {
+            color: #1a044e; /* 내비게이션 링크 색상 */
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        .navigation a:hover {
+            text-decoration: underline; /* hover 시 밑줄 */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>{{ exercise_name }} 운동 칼로리 계산</h1>
+        <!-- 뒤로 가기 | 홈으로 텍스트로 표시 -->
+        <div class="navigation">
+            <a href="javascript:history.back()">뒤로 가기</a> | 
+            <a href="{{ url_for('index') }}">홈으로</a>
+        </div>
+        <form method="POST">
+            <div class="form-group">
+                <label for="weight">체중 (kg):</label>
+                <input type="number" id="weight" name="weight" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="exercise_time">운동 시간 (분):</label>
+                <input type="number" id="exercise_time" name="exercise_time" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">칼로리 계산</button>
+        </form>
+    </div>
+
+</body>
+</html>

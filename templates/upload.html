@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>사진 업로드</title>
+    <style>
+        /* 기본 스타일 */
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #ffffff; /* 흰색 배경 */
+            color: #1a044e; /* 텍스트 기본 색상 */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* 화면 높이에 맞춰 중앙 정렬 */
+        }
+
+        /* 컨테이너 스타일 */
+        .container {
+            text-align: center;
+            background-color: #f9f9f9; /* 밝은 배경 */
+            border: 1px solid #1a044e; /* 테두리 */
+            border-radius: 15px; /* 둥근 테두리 */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* 그림자 */
+            padding: 30px; /* 여백 */
+            max-width: 500px; /* 컨테이너 최대 너비 */
+            width: 90%; /* 반응형 */
+        }
+
+        /* 제목 스타일 */
+        h1 {
+            font-size: 32px; /* 제목 크기 */
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #1a044e;
+            text-shadow: 1px 1px 3px rgba(26, 4, 78, 0.3); /* 부드러운 그림자 */
+        }
+
+        /* 폼 스타일 */
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px; /* 항목 간격 */
+        }
+
+        label {
+            font-size: 18px; /* 레이블 크기 */
+            font-weight: bold;
+        }
+
+        input[type="file"],
+        input[type="date"],
+        input[type="submit"] {
+            width: 100%; /* 너비 100% */
+            max-width: 400px; /* 최대 너비 */
+            padding: 12px; /* 패딩 */
+            font-size: 16px; /* 글씨 크기 */
+            border: 1px solid #1a044e; /* 테두리 */
+            border-radius: 8px; /* 둥근 테두리 */
+            background-color: #ffffff; /* 흰색 배경 */
+            color: #1a044e;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* 입력 필드 그림자 */
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="file"]:focus,
+        input[type="date"]:focus {
+            border-color: #3e1c79; /* 포커스 테두리 색상 */
+            outline: none;
+        }
+
+        input[type="submit"] {
+            background-color: #1a044e; /* 버튼 배경 */
+            color: #ffffff; /* 버튼 텍스트 */
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #3e1c79; /* 호버 색상 */
+            transform: translateY(-2px); /* 살짝 올라가는 효과 */
+        }
+
+        /* 링크 스타일 */
+        a {
+            text-decoration: none;
+            color: #1a044e;
+            font-size: 16px; /* 링크 글씨 크기 */
+            margin-top: 15px;
+            display: inline-block;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #3e1c79; /* 링크 호버 색상 */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>사진 업로드</h1>
+        <form action="{{ url_for('upload_photo') }}" method="post" enctype="multipart/form-data">
+            <label for="photo">사진 선택</label>
+            <input type="file" name="photo" id="photo" required>
+            <label for="date">날짜</label>
+            <input type="date" name="date" id="date" required>
+            <input type="submit" value="업로드">
+        </form>
+        <a href="{{ url_for('view_calendar') }}">이미지 기록 보기</a>
+    </div>
+
+</body>
+</html>

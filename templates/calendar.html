@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>사진 기록</title>
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #fffff; /* 어두운 배경 */
+            color: #1a044e; /* 흰색 글자 */
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            color: #1a044e; /* 하늘색 */
+            font-size: 36px;
+            margin-top: 30px;
+            text-shadow: 1px 1px 2px #0097a7;
+        }
+        .calendar-container {
+            background-color: #fffff; /* 다크 배경 */
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 1200px;
+            margin: 30px auto;
+        }
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 15px;
+            justify-items: center;
+        }
+        .calendar div {
+            background-color: #1a044e; /* 진한 청록색 */
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0px 0px 10px rgba(226, 9, 9, 0.2);
+            transition: transform 0.2s ease, background-color 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .calendar div:hover {
+            transform: scale(1.05);
+            background-color: #1a044e;
+        }
+        .calendar img {
+            width: 100%;
+            max-width: 200px;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+            margin-bottom: 10px;
+            border: 3px solid #1a044e;
+        }
+        .date {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 10px;
+            color: #1a044e;
+        }
+        .actions {
+            display: flex;
+            justify-content: space-around; /* 버튼 간 균등 배치 */
+            gap: 5px; /* 버튼 사이 간격 최소화 */
+            margin-top: 5px; /* 위쪽 여백 줄이기 */
+            width: 100%; /* 부모 요소에 맞추기 */
+        }
+        
+        .actions a, .actions input {
+            background-color: #1a044e;
+            color: white;
+            padding: 5px 10px; /* 버튼 내부 여백 축소 */
+            border: none;
+            border-radius: 10px; /* 둥근 모서리 */
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 12px; /* 버튼 글자 크기 축소 */
+            transition: background-color 0.3s;
+        }
+        
+        .actions a:hover, .actions input:hover {
+            background-color: #2b186e; /* 호버 시 약간 어두운 색 */
+        }
+        a {
+            text-decoration: none;
+            color: white;
+            font-size: 20px;
+            margin-top: 30px;
+            display: inline-block;
+            padding: 15px 30px;
+            background-color: #1a044e;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            transition: background-color 0.3s;
+        }
+        a:hover {
+            background-color: #1a044e;
+        }
+        .navigation {
+            margin-top: 20px;
+            color: white;
+            font-size: 16px;
+        }
+        .navigation a {
+            text-decoration: none;
+            color: white;
+            margin: 0 10px;
+        }
+        .navigation a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>사진 기록</h1>
+    <!-- 뒤로 가기 | 홈으로 -->
+    <div class="navigation">
+        <a href="javascript:history.back()">뒤로 가기</a> | 
+        <a href="{{ url_for('index') }}">홈으로</a>
+    </div>
+    <div class="calendar-container">
+        <div class="calendar">
+            {% for record in records %}
+            <div>
+                <img src="{{ url_for('static', filename=record[1].replace('\\', '/')) }}" alt="사진">
+                <div class="date">{{ record[2] }}</div>
+                <div class="actions">
+                    <a href="{{ url_for('edit_photo', record_id=record[0]) }}">수정</a>
+                    <form action="{{ url_for('delete_photo', record_id=record[0]) }}" method="post" style="display:inline;">
+                        <input type="submit" value="삭제" onclick="return confirm('정말 삭제하시겠습니까?');">
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <a href="{{ url_for('upload_photo') }}">사진 업로드</a>
+</body>
+</html>

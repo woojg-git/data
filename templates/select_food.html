@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>음식 선택</title>
+    <style>
+        /* 기본 스타일 */
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f5f5f5; /* 흰색 배경 */
+            color: #1a044e; /* 텍스트 기본 색상 */
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #1a044e; /* 제목 색상 */
+        }
+
+        .navigation {
+            margin-bottom: 20px;
+        }
+
+        .navigation a {
+            color: #1a044e;
+            text-decoration: none;
+            font-size: 1.2em;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .navigation a:hover {
+            color: #3e1c79; /* 살짝 어두운 톤 */
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff; /* 밝은 그레이 배경 */
+            border: 1px solid #1a044e; /* 테두리 */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 */
+        }
+
+        .food-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* 반응형 열 */
+            gap: 15px;
+            width: 100%;
+            max-height: 400px; /* 스크롤 제한 */
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding: 10px;
+        }
+
+        .food-checkbox {
+            display: flex;
+            align-items: center;
+            background-color: #ffffff; /* 카드 배경 */
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #1a044e; /* 테두리 */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="checkbox"] {
+            margin-right: 10px;
+            accent-color: #1a044e; /* 체크박스 색상 */
+        }
+
+        label {
+            font-size: 1em;
+            color: #1a044e;
+        }
+
+        .manual-food {
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .manual-food h3 {
+            font-size: 1.5em;
+            color: #1a044e;
+            margin-bottom: 15px;
+        }
+
+        .manual-food input {
+            width: calc(50% - 20px); /* 반응형 너비 */
+            max-width: 300px;
+            padding: 10px;
+            margin: 5px;
+            font-size: 14px;
+            border: 1px solid #1a044e; /* 테두리 */
+            border-radius: 5px;
+            background-color: #ffffff; /* 흰색 배경 */
+            color: #1a044e;
+        }
+
+        .manual-food input::placeholder {
+            color: #7f8c8d; /* 플래이스홀더 색상 */
+        }
+
+        button {
+            padding: 15px 40px;
+            font-size: 1.5em;
+            color: #ffffff;
+            background-color: #1a044e; /* 버튼 색상 */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #3e1c79; /* 버튼 호버 색상 */
+        }
+
+        @media (max-width: 768px) {
+            .manual-food input {
+                width: 80%; /* 모바일에서는 입력 필드가 더 넓게 */
+            }
+
+            .food-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* 모바일에서 2열 */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>음식을 선택하세요</h1>
+
+    <!-- 뒤로 가기 | 홈으로 링크 -->
+    <div class="navigation">
+        <a href="javascript:history.back()">뒤로 가기</a> | 
+        <a href="{{ url_for('index') }}">홈으로</a>
+    </div>
+
+    <form method="POST">
+        <!-- 음식 리스트 -->
+        <div class="food-grid">
+            {% for food in food_list %}
+            <div class="food-checkbox">
+                <input type="checkbox" name="foods" value="{{ food }}" id="{{ food }}">
+                <label for="{{ food }}">{{ food }}</label>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- 수동 입력 필드 -->
+        <div class="manual-food">
+            <h3>목록에 없는 음식 입력하기</h3>
+            <input type="text" name="manual_food_name" placeholder="음식명">
+            <input type="text" name="manual_food_calories" placeholder="칼로리 (kcal)">
+            <input type="text" name="manual_food_carbs" placeholder="탄수화물 (g)">
+            <input type="text" name="manual_food_protein" placeholder="단백질 (g)">
+            <input type="text" name="manual_food_fat" placeholder="지방 (g)">
+            <input type="text" name="manual_food_cholesterol" placeholder="콜레스테롤 (mg)">
+            <input type="text" name="manual_food_fiber" placeholder="식이섬유 (g)">
+            <input type="text" name="manual_food_sodium" placeholder="나트륨 (mg)">
+        </div>
+
+        <button type="submit">계산하기</button>
+    </form>
+
+</body>
+</html>

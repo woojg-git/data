@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>운동 추천 시스템</title>
+    <style>
+        /* 전체적인 스타일 */
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f5f5f5 ;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            background-image: url('{{ url_for("static", filename="배경.jpg") }}');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #1a044e;
+            margin-top: 100px;
+            font-size: 3.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        h1 img {
+            width: 60px;
+            height: 60px;
+            vertical-align: middle;
+            margin-left: 10px;
+        }
+
+        /* 로그인 및 회원가입 스타일 */
+        .auth-container {
+            position: absolute; /* 스크롤과 무관하게 상단 우측 고정 */
+            top: 10px;
+            right: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
+            z-index: 10; /* 다른 콘텐츠와 겹치지 않도록 위로 올림 */
+        }
+
+        .auth-links {
+            display: flex;
+            gap: 10px;
+            font-size: 16px;
+        }
+
+        .auth-links a {
+            color: #0c0101;
+            text-decoration: none;
+        }
+
+        /* 로그인 상태 메시지 */
+        .welcome-message {
+            font-size: 1.2em; 
+            color: #0f0101;
+            margin-left: 20px;
+        }
+
+        /* 사용자 이름 스타일 */
+        .username {
+            color: #981beb;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .section {
+            width: 90%;
+            max-width: 600px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        /* 입력 필드 스타일 */
+        input[type="text"],
+        input[type="number"],
+        input[type="file"],
+        input[type="date"] {
+            width: 95%;
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid #1a044e;
+            border-radius: 10px;
+            font-size: 16px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 버튼 스타일 */
+        button {
+            display: block;
+            width: 100%;
+            background-color: #1a044e;
+            color: white;
+            font-size: 18px;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #0e0139;
+        }
+
+        /* 모바일 화면에서 레이아웃 조정 */
+        @media (max-width: 768px) {
+            .section {
+                width: 95%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- 로그인 및 회원가입 링크 및 로그인 상태 메시지 -->
+<div class="auth-container">
+    <!-- 로그인 및 회원가입 링크 -->
+    {% if not session['username'] %}
+        <div class="auth-links">
+            <a href="{{ url_for('login') }}">로그인</a>
+            <a href="{{ url_for('register') }}">회원가입</a>
+        </div>
+    {% endif %}
+
+    <!-- 로그인 상태에 따른 메시지 및 로그아웃 버튼 -->
+    <div style="text-align: right;">
+        {% if session['username'] %}
+            <div>
+                <span class="welcome-message">
+                    <span class="username">{{ session['username'] }}</span>님, 다이어트를 응원합니다!
+                </span>
+            </div>
+            <form action="{{ url_for('logout') }}" method="POST" style="margin-top: 5px;">
+                <button type="submit">로그아웃</button>
+            </form>
+        {% else %}
+            <span class="welcome-message">로그인하지 않으셨습니다.</span>
+        {% endif %}
+    </div>
+</div>
+
+<!-- 운동 추천 시스템 섹션 -->
+<h1>
+    나에게 맞는 건강한 LIFE
+    <img src="{{ url_for('static', filename='유령.png') }}" alt="유령 이미지">
+</h1>
+
+<div class="full-width-box" style="width: 100%; background-color: #1a044e; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); border-radius: 10px; text-align: center;">
+    <div class="description" style="color: white;">
+        <strong style="font-size: 1.5em;">내가 할 수 있는 운동은 뭘까?</strong><br>
+        당신의 성향에 맞는 운동과 함께<br>
+        섭취한 음식의 에너지와 소모한 에너지를 쉽게 비교하고<br>
+        자신의 변화된 모습을 기록하여 건강한 LIFE를 만들어 보세요
+    </div>
+</div>
+
+<!-- 운동 추천, 칼로리 계산, 운동 정보 입력, 사진 등록 섹션 -->
+<div class="section" style="background-color: #ffffff; border: 2px solid #1a044e; border-radius: 15px; padding: 20px;">
+    <h2>운동 추천 방식을 선택하세요:</h2>
+    <form class="recommendation-form" method="POST">
+        <div class="recommendation-option" style="margin-bottom: 15px;">
+            <label for="direct" style="display: flex; align-items: center; padding: 15px; border: 2px solid #1a044e; border-radius: 10px; transition: background-color 0.3s; cursor: pointer;">
+                <input type="radio" id="direct" name="recommendation_type" value="direct" style="margin-right: 10px;">
+                <span style="font-size: 1.2em; color: #1a044e;">유튜브 운동 강좌 추천받기</span>
+            </label>
+        </div>
+        <div class="recommendation-option" style="margin-bottom: 15px;">
+            <label for="mbti" style="display: flex; align-items: center; padding: 15px; border: 2px solid #1a044e; border-radius: 10px; transition: background-color 0.3s; cursor: pointer;">
+                <input type="radio" id="mbti" name="recommendation_type" value="mbti" style="margin-right: 10px;">
+                <span style="font-size: 1.2em; color: #1a044e;">운동 MBTI 검사</span>
+            </label>
+        </div>
+        <button type="submit">선택하기</button>
+    </form>
+</div>
+
+<div class="section" style="background-color: #ffffff; border: 2px solid #1a044e; border-radius: 15px; padding: 20px;">
+    <h2>음식 칼로리 계산</h2>
+    <form action="{{ url_for('select_food') }}" method="GET">
+        <button type="submit">칼로리 계산하기</button>
+    </form>
+</div>
+
+<div class="section" style="background-color: #ffffff; border: 2px solid #1a044e; border-radius: 15px; padding: 20px;">
+    <h2>운동 정보 입력</h2>
+    <form action="{{ url_for('calculate_energy') }}" method="POST">
+        <label for="weight">몸무게 (kg):</label>
+        <input type="number" name="weight" required>
+
+        <label for="exercise_time">운동한 시간 (분):</label>
+        <input type="number" name="exercise_time" required>
+
+        <label for="exercise_name">운동명:</label>
+        <input type="text" name="exercise_name" placeholder="ex) 걷기, 달리기, 축구" required>
+
+        <button type="submit">계산하기</button>
+    </form>
+</div>
+
+
+<div class="section" style="background-color: #ffffff; border: 2px solid #1a044e; border-radius: 15px; padding: 20px;">
+    <h2>자신의 변화된 모습을 기록해 보세요!</h2>
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+        <label for="photo">사진 파일:</label>
+        <input type="file" id="photo" name="photo" required>
+
+        <label for="date">날짜 (YYYY-MM-DD):</label>
+        <input type="date" id="date" name="date" required>
+
+        <button type="submit">사진 등록</button>
+    </form>
+
+    <form action="/calendar" method="GET">
+        <button type="submit" style="margin-top: 20px;">내몸의 변화 한눈에 </button>
+    </form>
+</div>
+
+<!-- FAQ 섹션 -->
+<div class="section" style="background-color: #ffffff; border: 2px solid #1a044e; border-radius: 15px; padding: 20px;">
+    <h2 style="text-align: center;">자주 묻는 질문 (F&Q)</h2>
+    
+    <div class="faq-item" style="border: 1px solid #1a044e;; padding: 10px; margin-bottom: 15px; border-radius: 8px;">
+        <p><strong>Q1:</strong> 유튜브 운동 강좌 추천받기 시스템은 어떻게 작동하나요?</p>
+        <p>A: 사용자가 선택한 운동 방식에 따라 맞춤형 유튜브 운동영상을 추천합니다.</p>
+    </div>
+    
+    <div class="faq-item" style="border: 1px solid #1a044e;; padding: 10px; margin-bottom: 15px; border-radius: 8px;">
+        <p><strong>Q2:</strong> MBTI 검사는 어떻게 진행되나요?</p>
+        <p>A: 간단한 질문을 통해 사용자의 성향을 분석하여 운동을 추천합니다.</p>
+    </div>
+    
+    <div class="faq-item" style="border: 1px solid #1a044e;; padding: 10px; margin-bottom: 15px; border-radius: 8px;">
+        <p><strong>Q3:</strong> 목록에 없는 음식을 섭취한 경우에는 어떻게 계산하나요?</p>
+        <p>A: 목록에 없는 음식을 섭취한 경우에는 섭취한 음식의 영양성분을 직접 입력하면, 계산결과에 포함된 값을 알려줍니다.</p>
+    </div>
+    
+    <div class="faq-item" style="border: 1px solid #1a044e;; padding: 10px; margin-bottom: 15px; border-radius: 8px;">
+        <p><strong>Q4:</strong> 자신의 변화된 모습을 기록하는건 어떤 기능인가요?</p>
+        <p>A: 날짜별 자신의 체형을 사진으로 기록하고 변화를 한 눈에 볼 수 있게하여 다이어트나 운동에 동력과 활기를 불어넣어 줄 수 있는 기능으로 사용할 수 있습니다.</p>
+    </div>
+</div>
+
+</body>
+</html>

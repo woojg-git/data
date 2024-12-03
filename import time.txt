@@ -1,0 +1,23 @@
+import time
+import random
+
+def generate_filename(filename):
+    timestamp = str(int(time.time()))  # 현재 시간 (초 단위)
+    random_suffix = str(random.randint(1000, 9999))  # 랜덤 숫자 추가
+    file_extension = filename.rsplit('.', 1)[1]
+    return f"{timestamp}_{random_suffix}.{file_extension}"
+
+if request.method == "POST":
+    photo = request.files['photo']
+    if photo and allowed_file(photo.filename):
+        filename = generate_filename(photo.filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        photo.save(filepath)
+
+        # 데이터베이스에 사진 정보 저장
+        photo_record = Photo(filename=filename, user_id=current_user.id)
+        db.session.add(photo_record)
+        db.session.commit()
+        
+        flash("사진 업로드 성공!", 'success')
+        return redirect(url_for('view_calendar'))

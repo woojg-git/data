@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>운동 결과</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #ffffff; /* 흰색 배경 */
+            color: #1a044e; /* 텍스트 기본 색상 */
+            font-family: 'Nunito', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #f4f4f4; /* 밝은 그레이 배경 */
+            padding: 30px;
+            border-radius: 15px; /* 둥근 테두리 */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 */
+            width: 100%;
+            max-width: 600px; /* 최대 너비 */
+            border: 1px solid #1a044e; /* 테두리 */
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: #1a044e; /* 제목 색상 */
+        }
+
+        p {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        strong {
+            font-size: 20px;
+            color: #3e1c79; /* 강조 텍스트 색상 */
+        }
+
+        a {
+            color: #1a044e;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+            color: #3e1c79; /* 호버 색상 */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>운동 결과</h1>
+        <p><strong>운동명:</strong> {{ exercise_name }}</p>
+        <p><strong>체중:</strong> {{ weight }} kg</p>
+        <p><strong>운동 시간:</strong> {{ exercise_time }} 분</p>
+        <p><strong>소모한 열량:</strong> {{ calories_burned }} 칼로리</p>
+        <br>
+        <div class="text-center">
+            <a href="{{ url_for('index') }}">홈으로</a>
+        </div>
+    </div>
+
+</body>
+</html>
